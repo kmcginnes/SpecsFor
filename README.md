@@ -2,8 +2,12 @@
 SpecsFor is another Behavior-Driven Development framework that focuses on ease of use for *developers* by minimizing testing friction.
 
 #Fork Changes
+
+I'm currently working on the following changes:
+
 * AutoMocking - NSubstitute used instead of Moq
 * Test Framework - XUnit instead of NUnit
+* Assertions - Fluent Assertions instead of FluentAssert (similar, but I'm used to the former)
 
 #Main Features
 
