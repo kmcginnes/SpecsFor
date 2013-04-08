@@ -1,6 +1,10 @@
 #Project Description
 SpecsFor is another Behavior-Driven Development framework that focuses on ease of use for *developers* by minimizing testing friction.
 
+#Fork Changes
+* AutoMocking - NSubstitute used instead of Moq
+* Test Framework - XUnit instead of NUnit
+
 #Main Features
 
 SpecsFor is a Behavior-Driven Development style framework that puts developer productivity ahead of all other goals.  The current release features:
