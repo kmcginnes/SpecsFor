@@ -37,7 +37,7 @@ The easiest way to get started is to create your first spec!  Let's create a sim
 			GetMockFor<IInventory>().Verify();
  
 			GetMockFor<IPublisher>()
-				.Verify(p => p.Publish(It.Is<OrderSubmitted>(o => o.OrderNumber == result.OrderNumber)));
+				.Verify(p => p.Publish(Arg.Is<OrderSubmitted>(o => o.OrderNumber == result.OrderNumber)));
 		}
 	}
 
@@ -78,7 +78,7 @@ this test is still ugly, let's refactor it to be more BDD:
 		public void then_it_raises_a_new_event()
 		{
 			GetMockFor<IPublisher>()
-				.Verify(p => p.Publish(It.Is<OrderSubmitted>(o => o.OrderNumber == result.OrderNumber)));
+				.Verify(p => p.Publish(Arg.Is<OrderSubmitted>(o => o.OrderNumber == result.OrderNumber)));
 		}
 	}
 

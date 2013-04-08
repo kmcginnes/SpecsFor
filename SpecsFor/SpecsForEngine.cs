@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using SpecsFor.Configuration.Model;
 using SpecsFor.Validation;
 using StructureMap.AutoMocking;
+using StructureMap.AutoMocking.NSubstitute;
 
 namespace SpecsFor
 {
@@ -13,7 +14,7 @@ namespace SpecsFor
 		private readonly ISpecValidator _validator;
 		private readonly List<Exception> _exceptions = new List<Exception>();
 
-		public MoqAutoMocker<T> Mocker { get; private set; }
+        public AutoMocker<T> Mocker { get; private set; }
 
 		public T SUT { get; set; }
 
@@ -35,7 +36,7 @@ namespace SpecsFor
 
 			try
 			{
-				Mocker = new MoqAutoMocker<T>();
+				Mocker = (AutoMocker<T>)NSubstituteAutoMockerBuilder.Build<T>();
 
 				_currentBehaviors.ApplySpecInitTo(_specs);
 

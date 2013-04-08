@@ -1,5 +1,4 @@
-﻿using Moq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SpecsFor.Configuration.Model;
 using SpecsFor.Validation;
 using StructureMap;
@@ -34,7 +33,7 @@ namespace SpecsFor
 		/// </summary>
 		/// <typeparam name="TMock"></typeparam>
 		/// <returns></returns>
-		public Mock<TMock> GetMockFor<TMock>() where TMock : class
+		public TMock GetMockFor<TMock>() where TMock : class
 		{
 			return _engine.Mocker.GetMockFor<T, TMock>();
 		}
@@ -47,7 +46,7 @@ namespace SpecsFor
 		/// <typeparam name="TMock"></typeparam>
 		/// <param name="enumerableSize"></param>
 		/// <returns></returns>
-		public Mock<TMock>[] GetMockForEnumerableOf<TMock>(int enumerableSize) where TMock : class
+		public TMock[] GetMockForEnumerableOf<TMock>(int enumerableSize) where TMock : class
 		{
 			return _engine.Mocker.GetMockForEnumerableOf<T, TMock>(enumerableSize);	
 		}

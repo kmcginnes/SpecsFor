@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Linq;
-using Moq;
 using StructureMap.AutoMocking;
 
 namespace SpecsFor
 {
 	public static class AutoMockerExtensions
 	{
-		public static Mock<TMock> GetMockFor<T, TMock>(this IAutoMocker<T> mocker) where TMock : class where T : class
+		public static TMock GetMockFor<T, TMock>(this IAutoMocker<T> mocker) where TMock : class where T : class
 		{
 			return Mock.Get(mocker.Get<TMock>());
 		}
 
-		public static Mock<TMock>[] GetMockForEnumerableOf<T, TMock>(this IAutoMocker<T> mocker, int enumerableSize) where TMock : class where T : class
+		public static TMock[] GetMockForEnumerableOf<T, TMock>(this IAutoMocker<T> mocker, int enumerableSize) where TMock : class where T : class
 		{
 			var existingMocks = mocker.Container.Model.InstancesOf<TMock>().ToArray();
 

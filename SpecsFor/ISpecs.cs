@@ -1,11 +1,10 @@
-﻿using Moq;
-using StructureMap;
+﻿using StructureMap;
 
 namespace SpecsFor
 {
 	public interface ISpecs
 	{
-		Mock<TMock> GetMockFor<TMock>() where TMock : class;
+		TMock GetMockFor<TMock>() where TMock : class;
 
 		/// <summary>
 		/// Creates an IEnumerable of mock objects of T, and returns the mock objects
@@ -15,7 +14,7 @@ namespace SpecsFor
 		/// <typeparam name="TMock"></typeparam>
 		/// <param name="enumerableSize"></param>
 		/// <returns></returns>
-		Mock<TMock>[] GetMockForEnumerableOf<TMock>(int enumerableSize) where TMock : class;
+		TMock[] GetMockForEnumerableOf<TMock>(int enumerableSize) where TMock : class;
 
 
 		void ConfigureContainer(IContainer container);
