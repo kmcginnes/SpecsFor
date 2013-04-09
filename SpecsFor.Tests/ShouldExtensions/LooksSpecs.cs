@@ -1,6 +1,4 @@
-﻿using System;
-using Moq;
-using NSubstitute;
+﻿using NSubstitute;
 using NSubstitute.Exceptions;
 using NUnit.Framework;
 using SpecsFor.ShouldExtensions;
@@ -30,7 +28,7 @@ namespace SpecsFor.Tests.ShouldExtensions
 		}
 
 		[Test]
-		public void moq_will_match_on_an_equivalent_object()
+		public void nsubstitute_will_match_on_an_equivalent_object()
 		{
 			var mock = GetMockFor<ITestService>();
 
@@ -40,7 +38,7 @@ namespace SpecsFor.Tests.ShouldExtensions
 		}
 
 		[Test]
-		public void moq_will_not_match_on_a_nonequivalent_object()
+		public void nsubstitute_will_not_match_on_a_nonequivalent_object()
 		{
 			var mock = GetMockFor<ITestService>();
 
@@ -50,7 +48,7 @@ namespace SpecsFor.Tests.ShouldExtensions
 		}
 
 		[Test]
-		public void moq_will_match_on_a_partial_object()
+		public void nsubstitute_will_match_on_a_partial_object()
 		{
 			var mock = GetMockFor<ITestService>();
 
@@ -60,7 +58,7 @@ namespace SpecsFor.Tests.ShouldExtensions
 		}
 
 		[Test]
-		public void moq_will_not_match_on_a_nonequivalent_partial_object()
+		public void nsubstitute_will_not_match_on_a_nonequivalent_partial_object()
 		{
 			var mock = GetMockFor<ITestService>();
 

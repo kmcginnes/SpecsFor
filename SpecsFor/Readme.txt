@@ -96,7 +96,7 @@ Derek Greer.
 
 Should - Write cleaner asserts using the Should library, including SpecsFor's many custom Should extensions.
 Looks - Thanks to ExpectedObjects, you can easily compare that two objects *look* like one another.
-Mocking - Mocking is provided by Moq, but many common pain points are alleviated by SpecsFor's extensions.
+Mocking - Mocking is provided by NSubstitute, but many common pain points are alleviated by SpecsFor's extensions.
 Conventions - Customize SpecsFor's behavior by creating a custom SpecsForConfiguration class.
 
 If there's a common testing pattern, utility, or library that you think should be bundled with SpecsFor, let me know!
@@ -106,7 +106,7 @@ Credits
 -------
 My thanks go to the authors of libraries that SpecsFor utilizes:
 -ExpectedObjects
--Moq
+-NSubstitute
 -NUnit
 -Should
 -StructureMap.AutoMocking

@@ -1,5 +1,5 @@
 ﻿using System;
-using Moq;
+using NSubstitute;
 using NUnit.Framework;
 using Should;
 using SpecsFor.Demo.Domain;
@@ -38,14 +38,14 @@ namespace SpecsFor.Demo.ShouldExtensions
 			[Test]
 			public void then_it_publishes_an_event()
 			{
-				GetMockFor<IPublisher>()
-					.Verify(p => p.Publish(It.Is<InvoiceSubmittedEvent>(e =>
-					                                                    e.BillingName == _invoice.BillingName &&
-					                                                    e.BillingAddress == _invoice.BillingAddress &&
-					                                                    e.BillingCity == _invoice.BillingCity &&
-					                                                    e.BillingZip == _invoice.BillingZip &&
-					                                                    e.Amount == _invoice.Amount &&
-					                                                    e.Description == _invoice.Description)));
+			    GetMockFor<IPublisher>()
+			        .Received().Publish(Arg.Is<InvoiceSubmittedEvent>(
+			            e => e.BillingName == _invoice.BillingName &&
+			                 e.BillingAddress == _invoice.BillingAddress &&
+			                 e.BillingCity == _invoice.BillingCity &&
+			                 e.BillingZip == _invoice.BillingZip &&
+			                 e.Amount == _invoice.Amount &&
+			                 e.Description == _invoice.Description));
 			}
 		}
 
@@ -78,7 +78,7 @@ namespace SpecsFor.Demo.ShouldExtensions
 			public void then_it_publishes_an_event()
 			{
 				GetMockFor<IPublisher>()
-					.Verify(p => p.Publish(Looks.Like(new InvoiceSubmittedEvent
+					.Received().Publish(Looks.Like(new InvoiceSubmittedEvent
 					                                  	{
 					                                  		BillingName = _invoice.BillingName,
 					                                  		BillingAddress = _invoice.BillingAddress,
@@ -86,7 +86,7 @@ namespace SpecsFor.Demo.ShouldExtensions
 					                                  		BillingZip = _invoice.BillingZip,
 					                                  		Amount = _invoice.Amount,
 					                                  		Description = _invoice.Description
-					                                  	})));
+					                                  	}));
 			}
 		}
 	}
