@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using NSubstitute;
 using NUnit.Framework;
 using Should;
 using System.Linq;
@@ -63,7 +64,7 @@ namespace SpecsFor.Tests
 		{
 			protected override void InitializeClassUnderTest()
 			{
-				SUT = GetMockFor<IDisposable>().Object;
+				SUT = GetMockFor<IDisposable>();
 			}
 
 			protected override void When()
@@ -75,7 +76,7 @@ namespace SpecsFor.Tests
 			public void then_it_should_call_Dispose()
 			{
 				GetMockFor<IDisposable>()
-					.Verify(d => d.Dispose());
+					.Received().Dispose();
 			}
 		}
 
@@ -96,9 +97,9 @@ namespace SpecsFor.Tests
 				for (var i = 0; i < mocks.Length; i++)
 				{
 					var widget = mocks[i];
-					widget.Setup(w => w.Name).Returns("Widget " + i);
+					widget.Name.Returns("Widget " + i);
 
-					widgets[i] = widget.Object;
+					widgets[i] = widget;
 				}
 
 				_testWidgets = widgets;
@@ -122,7 +123,7 @@ namespace SpecsFor.Tests
 				var mocks = GetMockForEnumerableOf<IWidget>(10);
 
 				var injectedNames = SUT.Widgets.Select(w => w.Name);
-				var mockNames = mocks.Select(m => m.Object.Name);
+				var mockNames = mocks.Select(m => m.Name);
 
 				mockNames.ShouldEqual(injectedNames);
 			}
@@ -162,7 +163,7 @@ namespace SpecsFor.Tests
 
 				public void Initialize(ISpecs<object> state)
 				{
-					state.GetMockFor<TextWriter>().Object.Write(_name);
+					state.GetMockFor<TextWriter>().Write(_name);
 				}
 			}
 
@@ -176,10 +177,10 @@ namespace SpecsFor.Tests
 			public void then_it_calls_both_contexts()
 			{
 				GetMockFor<TextWriter>()
-					.Verify(w => w.Write("Test1"));
+					.Received().Write("Test1");
 	
 				GetMockFor<TextWriter>()
-					.Verify(w => w.Write("Test2"));
+					.Received().Write("Test2");
 			}
 		}
 	}

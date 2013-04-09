@@ -1,5 +1,7 @@
 ﻿using System;
 using Moq;
+using NSubstitute;
+using NSubstitute.Exceptions;
 using NUnit.Framework;
 using SpecsFor.ShouldExtensions;
 
@@ -32,9 +34,9 @@ namespace SpecsFor.Tests.ShouldExtensions
 		{
 			var mock = GetMockFor<ITestService>();
 
-			mock.Object.DoStuff(new TestObject {ID = 1, Name = "Test"});
+			mock.DoStuff(new TestObject {ID = 1, Name = "Test"});
 
-			Assert.DoesNotThrow(() => mock.Verify(s => s.DoStuff(Looks.Like(new TestObject {ID = 1, Name = "Test"}))));
+			Assert.DoesNotThrow(() => mock.Received().DoStuff(Looks.Like(new TestObject {ID = 1, Name = "Test"})));
 		}
 
 		[Test]
@@ -42,9 +44,9 @@ namespace SpecsFor.Tests.ShouldExtensions
 		{
 			var mock = GetMockFor<ITestService>();
 
-			mock.Object.DoStuff(new TestObject {ID = 3, Name = "Name"});
+			mock.DoStuff(new TestObject {ID = 3, Name = "Name"});
 
-			Assert.Throws<MockException>(() => mock.Verify(s => s.DoStuff(Looks.Like(new TestObject {ID = 1, Name = "Not Name"}))));
+            Assert.Throws<ReceivedCallsException>(() => mock.Received().DoStuff(Looks.Like(new TestObject { ID = 1, Name = "Not Name" })));
 		}
 
 		[Test]
@@ -52,9 +54,9 @@ namespace SpecsFor.Tests.ShouldExtensions
 		{
 			var mock = GetMockFor<ITestService>();
 
-			mock.Object.DoStuff(new TestObject {ID = 1, Name = "Test"});
+			mock.DoStuff(new TestObject {ID = 1, Name = "Test"});
 
-			Assert.DoesNotThrow(() => mock.Verify(s => s.DoStuff(Looks.LikePartialOf<TestObject>(new {ID = 1, Name = "Test"}))));
+			Assert.DoesNotThrow(() => mock.Received().DoStuff(Looks.LikePartialOf<TestObject>(new {ID = 1, Name = "Test"})));
 		}
 
 		[Test]
@@ -62,9 +64,9 @@ namespace SpecsFor.Tests.ShouldExtensions
 		{
 			var mock = GetMockFor<ITestService>();
 
-			mock.Object.DoStuff(new TestObject {ID = 3, Name = "Name"});
+			mock.DoStuff(new TestObject {ID = 3, Name = "Name"});
 
-			Assert.Throws<MockException>(() => mock.Verify(s => s.DoStuff(Looks.LikePartialOf<TestObject>(new {ID = 1, Name = "Not Name"}))));
+            Assert.Throws<ReceivedCallsException>(() => mock.Received().DoStuff(Looks.LikePartialOf<TestObject>(new { ID = 1, Name = "Not Name" })));
 		}
 	}
 }

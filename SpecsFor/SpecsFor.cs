@@ -51,7 +51,7 @@ namespace SpecsFor
 			return _engine.Mocker.GetMockForEnumerableOf<T, TMock>(enumerableSize);	
 		}
 
-		public MoqAutoMocker<T> Mocker
+		public AutoMocker<T> Mocker
 		{
 			get { return _engine.Mocker;}
 		} 

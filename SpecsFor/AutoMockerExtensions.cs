@@ -8,7 +8,7 @@ namespace SpecsFor
 	{
 		public static TMock GetMockFor<T, TMock>(this IAutoMocker<T> mocker) where TMock : class where T : class
 		{
-			return Mock.Get(mocker.Get<TMock>());
+			return mocker.Get<TMock>();
 		}
 
 		public static TMock[] GetMockForEnumerableOf<T, TMock>(this IAutoMocker<T> mocker, int enumerableSize) where TMock : class where T : class
@@ -23,12 +23,12 @@ namespace SpecsFor
 					                                    existingMocks.Length + ".");
 				}
 
-				return mocker.Container.GetAllInstances<TMock>().Select(Mock.Get).ToArray();
+				return mocker.Container.GetAllInstances<TMock>().ToArray();
 			}
 
 			var mocks = mocker.CreateMockArrayFor<TMock>(enumerableSize);
 
-			return mocks.Select(Mock.Get).ToArray();
+			return mocks.ToArray();
 		}
 	}
 }

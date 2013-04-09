@@ -1,5 +1,5 @@
 ﻿using System;
-using Moq;
+using NSubstitute;
 using NUnit.Framework;
 using SpecsFor.Configuration.Model;
 using SpecsFor.Validation;
@@ -15,8 +15,8 @@ namespace SpecsFor.Tests
 			protected override void Given()
 			{
 				GetMockFor<ISpecValidator>()
-					.Setup(v => v.ValidateSpec(It.IsAny<ISpecs>()))
-					.Throws(new InvalidOperationException());
+					.When(v => v.ValidateSpec(Arg.Any<ISpecs>()))
+                    .Do(x => { throw new InvalidOperationException(); });
 			}
 
 			public class when_initializing_the_engine : given_there_are_specs_for_config_classes_that_do_not_have_the_required_attributes
@@ -47,28 +47,28 @@ namespace SpecsFor.Tests
 			public void then_it_applies_spec_init_behaviors()
 			{
 				GetMockFor<IBehaviorStack>()
-					.Verify(s => s.ApplySpecInitTo(It.IsAny<object>()));
+					.Received().ApplySpecInitTo(Arg.Any<object>());
 			}
 
 			[Test]
 			public void then_it_invokes_the_configure_container_callback()
 			{
 				GetMockFor<ISpecs<object>>()
-					.Verify(s => s.ConfigureContainer(It.IsAny<IContainer>()));
+					.Received().ConfigureContainer(Arg.Any<IContainer>());
 			}
 
 			[Test]
 			public void then_it_invokes_the_initialize_class_under_test_callback()
 			{
 				GetMockFor<ISpecs<object>>()
-					.Verify(s => s.InitializeClassUnderTest());
+					.Received().InitializeClassUnderTest();
 			}
 
 			[Test]
 			public void then_it_applies_after_class_under_test_initialized_behaviors()
 			{
 				GetMockFor<IBehaviorStack>()
-					.Verify(s => s.ApplyAfterClassUnderTestInitializedTo(It.IsAny<object>()));
+					.Received().ApplyAfterClassUnderTestInitializedTo(Arg.Any<object>());
 			}
 		}
 
@@ -79,8 +79,8 @@ namespace SpecsFor.Tests
 			protected override void Given()
 			{
 				GetMockFor<ISpecs<object>>()
-					.Setup(s => s.InitializeClassUnderTest())
-					.Throws(new Exception());
+					.When(x => x.InitializeClassUnderTest())
+                    .Do(x => { throw new Exception(); });
 			}
 
 			protected override void When()
@@ -98,7 +98,7 @@ namespace SpecsFor.Tests
 			public void then_it_calls_the_after_spec_step_on_any_behaviors()
 			{
 				GetMockFor<IBehaviorStack>()
-					.Verify(s => s.ApplyAfterSpecTo(It.IsAny<ISpecs>()));
+					.Received().ApplyAfterSpecTo(Arg.Any<ISpecs>());
 			}
 		}
 
@@ -124,7 +124,7 @@ namespace SpecsFor.Tests
 			protected override void Given()
 			{
 				GetMockFor<IBehaviorStack>()
-					.Setup(s => s.GetInitializationMethodFor(It.IsAny<ISpecs<object>>()))
+					.GetInitializationMethodFor(Arg.Any<ISpecs<object>>())
 					.Returns(() => _expected);
 			}
 
@@ -155,14 +155,14 @@ namespace SpecsFor.Tests
 			public void then_it_invokes_the_given_of_the_spec()
 			{
 				GetMockFor<ISpecs<object>>()
-					.Verify(s => s.Given());
+					.Received().Given();
 			}
 
 			[Test]
 			public void then_it_invokes_the_given_behaviors()
 			{
 				GetMockFor<IBehaviorStack>()
-					.Verify(s => s.ApplyGivenTo(It.IsAny<ISpecs<object>>()));
+					.Received().ApplyGivenTo(Arg.Any<ISpecs<object>>());
 			}
 		}
 
@@ -170,9 +170,9 @@ namespace SpecsFor.Tests
 		{
 			protected override void Given()
 			{
-				GetMockFor<ISpecs<IDisposable>>()
-					.Setup(s => s.Given())
-					.Throws(new Exception());
+                GetMockFor<ISpecs<IDisposable>>()
+                    .When(x => x.Given())
+                    .Do(x => { throw new Exception(); });
 			}
 
 			internal class when_running_the_given_step : given_an_error_is_thrown_by_the_spec_during_the_given_callback
@@ -181,7 +181,7 @@ namespace SpecsFor.Tests
 
 				protected override void When()
 				{
-					SUT.SUT = GetMockFor<IDisposable>().Object;
+					SUT.SUT = GetMockFor<IDisposable>();
 					_exception = Assert.Throws<GivenSpecificationException>(() => SUT.Given());
 				}
 
@@ -195,14 +195,14 @@ namespace SpecsFor.Tests
 				public void then_it_invokes_the_after_spec_callback()
 				{
 					GetMockFor<IBehaviorStack>()
-						.Verify(s => s.ApplyAfterSpecTo(It.IsAny<ISpecs<IDisposable>>()));
+						.Received().ApplyAfterSpecTo(Arg.Any<ISpecs<IDisposable>>());
 				}
 
 				[Test]
 				public void then_it_disposes_of_the_system_under_test()
 				{
 					GetMockFor<IDisposable>()
-						.Verify(d => d.Dispose());
+						.Received().Dispose();
 				}
 			}
 
@@ -213,15 +213,15 @@ namespace SpecsFor.Tests
 				protected override void Given()
 				{
 					GetMockFor<IBehaviorStack>()
-						.Setup(s => s.ApplyAfterSpecTo(It.IsAny<ISpecs<IDisposable>>()))
-						.Throws(new InvalidOperationException("Other exception."));
+						.When(x => x.ApplyAfterSpecTo(Arg.Any<ISpecs<IDisposable>>()))
+                        .Do(x => { throw new InvalidOperationException("Other exception."); });
 
 					base.Given();
 				}
 
 				protected override void When()
 				{
-					SUT.SUT = GetMockFor<IDisposable>().Object;
+					SUT.SUT = GetMockFor<IDisposable>();
 					_exception = Assert.Throws<GivenSpecificationException>(() => SUT.Given());
 				}
 
@@ -245,7 +245,7 @@ namespace SpecsFor.Tests
 			public void then_it_calls_the_when_callback_on_the_spec()
 			{
 				GetMockFor<ISpecs<object>>()
-					.Verify(s => s.When());
+					.Received().When();
 			}
 		}
 
@@ -254,8 +254,8 @@ namespace SpecsFor.Tests
 			protected override void Given()
 			{
 				GetMockFor<ISpecs<IDisposable>>()
-					.Setup(s => s.When())
-					.Throws(new Exception());
+					.When(x => x.When())
+					.Do(x => { throw new Exception(); });
 			}
 
 			internal class when_running_the_when_stage : given_an_error_is_thrown_by_the_spec_during_the_when_callback
@@ -264,7 +264,7 @@ namespace SpecsFor.Tests
 
 				protected override void When()
 				{
-					SUT.SUT = GetMockFor<IDisposable>().Object;
+					SUT.SUT = GetMockFor<IDisposable>();
 					_exception = Assert.Throws<WhenSpecificationException>(() => SUT.When());
 				}
 
@@ -278,14 +278,14 @@ namespace SpecsFor.Tests
 				public void then_it_disposes_the_system_under_test()
 				{
 					GetMockFor<IDisposable>()
-						.Verify(d => d.Dispose());
+						.Received().Dispose();
 				}
 
 				[Test]
 				public void then_it_invokes_the_after_spec_callback_on_the_behaviors()
 				{
 					GetMockFor<IBehaviorStack>()
-						.Verify(s => s.ApplyAfterSpecTo(It.IsAny<ISpecs<IDisposable>>()));
+						.Received().ApplyAfterSpecTo(Arg.Any<ISpecs<IDisposable>>());
 				}
 			}
 
@@ -296,15 +296,15 @@ namespace SpecsFor.Tests
 				protected override void Given()
 				{
 					GetMockFor<IBehaviorStack>()
-						.Setup(s => s.ApplyAfterSpecTo(It.IsAny<ISpecs<IDisposable>>()))
-						.Throws(new InvalidOperationException());
+						.When(x => x.ApplyAfterSpecTo(Arg.Any<ISpecs<IDisposable>>()))
+						.Do(x => { throw new InvalidOperationException(); });
 
 					base.Given();
 				}
 
 				protected override void When()
 				{
-					SUT.SUT = GetMockFor<IDisposable>().Object;
+					SUT.SUT = GetMockFor<IDisposable>();
 					_exception = Assert.Throws<WhenSpecificationException>(() => SUT.When());
 				}
 
@@ -321,7 +321,7 @@ namespace SpecsFor.Tests
 		{
 			protected override void When()
 			{
-				SUT.SUT = GetMockFor<IDisposable>().Object;
+				SUT.SUT = GetMockFor<IDisposable>();
 				SUT.TearDown();
 			}
 
@@ -329,21 +329,21 @@ namespace SpecsFor.Tests
 			public void then_it_runs_the_after_spec_callback()
 			{
 				GetMockFor<ISpecs<IDisposable>>()
-					.Verify(s => s.AfterSpec());
+					.Received().AfterSpec();
 			}
 
 			[Test]
 			public void then_it_runs_the_after_spec_behaviors()
 			{
 				GetMockFor<IBehaviorStack>()
-					.Verify(s => s.ApplyAfterSpecTo(It.IsAny<ISpecs<IDisposable>>()));
+					.Received().ApplyAfterSpecTo(Arg.Any<ISpecs<IDisposable>>());
 			}
 
 			[Test]
 			public void then_it_disposes_the_system_under_test()
 			{
 				GetMockFor<IDisposable>()
-					.Verify(d => d.Dispose());
+					.Received().Dispose();
 			}
 		}
 	}
